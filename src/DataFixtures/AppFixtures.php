@@ -15,10 +15,10 @@ class AppFixtures extends Fixture
 
     private $slug;
 
-    public function __construct()
+    public function __construct(Slugify $slugify)
     {
         $this->faker = Factory::create();
-        $this->slug = new Slugify();
+        $this->slug = $slugify;
     }
 
     public function load(ObjectManager $manager)

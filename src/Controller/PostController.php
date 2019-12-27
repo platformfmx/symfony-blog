@@ -58,4 +58,43 @@ class PostController extends AbstractController
            'post' => $post
         ]);
     }
+
+    /**
+     * @Route("/post/{slug}/edit", name="edit_post")
+     * @param Post $post
+     * @param Request $request
+     * @param Slugify $slugify
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function edit(Post $post, Request $request, Slugify $slugify) {
+        $em = $this->getDoctrine()->getManager();
+
+        $form = $this->createForm(PostType::class, $post);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $post->setSlug($slugify->slugify($post->getTitle()));
+            $em->flush();
+
+            return $this->redirectToRoute("blog_show", [
+                'slug' => $post->getSlug()
+            ]);
+        }
+
+        return $this->render("post/add.html.twig", [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/post/{slug}/delete", name="delete_post")
+     * @param Post $post
+     */
+    public function delete(Post $post) {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($post);
+        $em->flush();
+
+        return $this->redirectToRoute("blog_posts");
+    }
 }

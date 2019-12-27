@@ -24,6 +24,23 @@ class PostController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @Route("/post/search", name="post_search")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function search(Request $request) {
+        $repo = $this->getDoctrine()->getRepository(Post::class);
+
+        $query = $request->query->get('q');
+        $posts = $repo->searchByQuery($query);
+
+        return $this->render('post/query_post.html.twig',[
+            'posts' => $posts
+        ]);
+    }
+
     /**
      * @Route("/post/add", name="add_post")
      */

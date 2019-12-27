@@ -5,7 +5,12 @@
 {% block body %}
 
     <p>{{post.body}}</p>
-    <a href="{{ path("edit_post",{'slug': post.slug}) }}">Edit</a>
-    <a href="{{ path("delete_post",{'slug': post.slug}) }}">Delete</a>
+    <a href="{{ path("edit_post",{'slug': post.slug}) }}">
+        <button class="btn btn-warning">Edit</button>
+    </a>
+    <a href="{{ path("delete_post",{'slug': post.slug}) }}">
+    <button class="btn btn-danger">Delete</button>
+    </a>
+
 
 {% endblock %}

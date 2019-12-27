@@ -2,28 +2,31 @@
 
 namespace App\Controller;
 
+use App\Entity\Post;
+use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PostController extends AbstractController
 {
     /**
-     * @Route("/post", name="post")
+     * @Route("/", name="post")
      */
     public function index()
     {
-        $posts = [
-          [
-              'title' => 'Заголовок 1 поста',
-              'body'  => 'Тело 1 поста'
-          ],
-          [
-              'title' => 'Заголовок 2 поста',
-              'body'  => 'Тело 2 поста'
-          ],
-        ];
+        $repo = $this->getDoctrine()->getRepository(Post::class);
+        $posts = $repo->findAll();
         return $this->render('post/index.html.twig', [
             'posts' => $posts
+        ]);
+    }
+
+    /**
+     * @Route("/post/{slug}", name="blog_show")
+     */
+    public function post(Post $post) {
+        return $this->render('post/post.html.twig', [
+           'post' => $post
         ]);
     }
 }
